@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class LauncherBean {
+public class Quaraf {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LauncherBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Quaraf.class);
 
     @Inject @Any
     private Instance<ServiceRegistry> registryInstance;
