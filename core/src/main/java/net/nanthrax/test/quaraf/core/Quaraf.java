@@ -1,5 +1,6 @@
 package net.nanthrax.test.quaraf.core;
 
+import io.quarkus.runtime.Shutdown;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
@@ -17,19 +18,20 @@ public class Quaraf {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Quaraf.class);
 
-    @Inject @Any
-    private Instance<ServiceRegistry> registryInstance;
-
     @Inject
-    private Instance<Config> config;
+    private ServiceRegistryBean serviceRegistry;
 
     @Startup
     void init() {
         LOGGER.info("Starting Quaraf");
-        LOGGER.info("\tService registries available: {}", registryInstance.stream().collect(Collectors.toList()));
-        ServiceRegistry registry = registryInstance.select(Default.Literal.INSTANCE).get();
-        LOGGER.info("\tService registry resolved to {}", registry);
-        LOGGER.info("\tRegistered services registry: {}", registry.services());
+        LOGGER.info("\tServices available: {}", serviceRegistry.services());
+        serviceRegistry.start();
+    }
+
+    @Shutdown
+    void close() {
+        LOGGER.info("Stopping Quaraf");
+        serviceRegistry.stop();
     }
 
 }
